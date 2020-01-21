@@ -1,0 +1,124 @@
+
+load_data = load '/bhavi/pig_demo.txt' ;
+
+dump load_data ;
+
+vim pig_demo.pig
+     "write some text "
+
+exec pig_demo.pig 
+
+============================================================
+-- Word count program
+============================================================
+
+lines = LOAD '/user/root/pig_demo.txt' AS (line:chararray);
+
+words = FOREACH lines GENERATE FLATTEN(TOKENIZE(line)) as word;
+
+grouped = GROUP words BY word;
+
+wordcount = FOREACH grouped GENERATE group, COUNT(words);
+
+DUMP wordcount;
+
+output :
+
+(world,22)
+(bright,11)
+(dreams,11)
+(living,11)
+(please,22)
+(python,11)
+(taking,11)
+(tunnel,11)
+(alright,11)
+
+
+
+----------------------------------------------------------------------------
+
+
+load data into a pig relation without a schema
+-----------
+
+departments = load '/bhavi/sqoop_for_pig/departments' using PigStorage(',');
+
+grunt> describe departments ;
+Schema for departments unknown
+
+ department_id = FOReach departments generate $0 ;
+grunt> describe department_id ;
+department_id: {bytearray}
+
+cast the department id into its original data type
+
+department_id = FOReach departments generate (int) $0 ;
+grunt> describe department_id ;
+department_id: {int}
+
+
+
+departments = LOAD '/bhavi/sqoop_for_pig/departments' using PigStorage(',') as (department_id: int, department_name: chararray);
+
+
+describe departments ;
+departments: {department_id: int,department_name: chararray}
+
+
+department_id = FOREACH departments GENERATE department_id  ;
+grunt> describe department_id ;
+department_id: {department_id: int}
+
+
+explain department_id ;
+
+
+
+=======================================================================
+
+load data from hive to pig relation 
+
+
+-------->>>>>>>>>>
+
+customer_details = LOAD 'retail_db.customers' USING org.apache.hive.hcatalog.pig.HCatLoader();
+
+describe customer_details ;
+
+dump customer_details ;
+
+
+customer_id = FOREACH customer_details Generate customer_id,customer_fname,customer_lname ;
+
+cust_id_limit = LIMIT customer_id 50 ;
+
+dump cust_id_limit ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
