@@ -1,0 +1,64 @@
+Data Ingestion----->>
+
+Sqoop
+
+sqoop help eval          # help to get on eval command
+
+
+sqoop version                       (sqoop 1.4.6)
+
+sqoop list-databases \
+--connect jdbc:mysql://192.168.1.40 \
+--username root \
+--password 123456
+
+O/P ---> lists all the databases
+
+sqoop list-databases \
+--connect jdbc:mysql://192.168.1.40 \
+--username root \
+-P
+
+sqoop list-tables \
+--connect jdbc:mysql://192.168.1.40/retail_db \
+--username root \
+--password 123456
+
+
+sqoop eval \
+--connect jdbc:mysql://192.168.1.40/retail_db \
+--username root \
+--password 123456 \
+--query "select * from orders limit 100"
+
+sqoop eval \
+--connect jdbc:mysql://192.168.1.40/retail_db \
+--username root \
+--password 123456 \
+-e "select * from orders limit 100"
+
+sqoop eval \
+--connect jdbc:mysql://192.168.1.40/sampledatabase \
+--username root \
+--password 123456 \
+-e "INSERT into members values (1010,'Johny')"
+
+
+sqoop eval \
+--connect jdbc:mysql://192.168.1.40/retail_db \
+--username root \
+--password 123456 \
+-e "describe order_items"
+
+sqoop eval \
+--connect jdbc:mysql://192.168.1.40/retail_db \
+--username root \
+--password 123456 \
+-e "select count(1) from order_items"
+
+
+sqoop eval \
+--connect jdbc:mysql://192.168.1.40/retail_db \
+--username root \
+--password 123456 \
+--query "select * from order_items limit 25"
